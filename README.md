@@ -12,7 +12,7 @@ __Situation__: The client is a reseller of  running shoes (brand “Fast Feed”
 __Goal:__   
 a. Code a webscraper in Python and parse the data from the Zurich Marathon from the website: https://services.datasport.com/2014/lauf/zuerich/alfab.htm for all athletes from a-z, from the year 2014 – 2018. 
 
-b. Store the data in a database with the following fields:
+b. Store the data in a database with the following fields:   
 *Id is an auto-generated integer (autoincrement)   
 *Category: Varchar   
 *Rang:  varchar   
