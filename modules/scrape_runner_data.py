@@ -4,7 +4,7 @@
 """
 import os
 import re
-from pandas import DataFrame
+from pandas import DataFrame, concat
 import requests
 from bs4 import BeautifulSoup
 
@@ -26,62 +26,62 @@ def get_runner_data(url):
 def parse_runner_data(html_content) -> list:
     """parses html content for relevant data"""
     soup = BeautifulSoup(html_content.text, "html.parser")
-    runner_data = soup.findAll("font", {"size" : "2"})
-    return list(runner_data[2:])
-
-# these functions extract 1 field each corresponding to desired database attributes
-def extract_runner_attr1(single_runner_data) -> str:
-    """returns category"""
-    return single_runner_data.text.split(" ")[0]
-
-def extract_runner_attr2(single_runner_data) -> str:
-    """returns Rang"""
-    #TODO: continue from here
-def extract_runner_attr3(single_runner_data) -> str:
-    return NotImplementedError
-def extract_runner_attr4(single_runner_data) -> str:
-    return NotImplementedError
-
-def extract_runner_attr5(single_runner_data) -> str:
-    return NotImplementedError
-
-def extract_runner_attr6(single_runner_data) -> str:
-    return NotImplementedError
-
-def extract_runner_attr7(single_runner_data) -> str:
-    return NotImplementedError
-
-def extract_runner_attr8(single_runner_data) -> str:
-    return NotImplementedError
-
-def extract_runner_attr9(single_runner_data) -> str:
-    return NotImplementedError
+    runner_data = soup.findAll("font", {"size": "2"})
+    return list(runner_data)
 
 
-def extract_runner_data(runner_data, field_names) -> dict:
-    """sets correct datatype and builds a dataframe"""
-    runner_list = []
-    for single_runner_data in runner_data:
-    single_runner_dict = { field_names[1]: extract_runner_attr1(single_runner_data),
-                           field_names[2]: extract_runner_attr2(single_runner_data),
-                           field_names[3]: extract_runner_attr3(single_runner_data),
-                           field_names[4]: extract_runner_attr4(single_runner_data),
-                           field_names[5]: extract_runner_attr5(single_runner_data),
-                           field_names[6]: extract_runner_attr6(single_runner_data),
-                           field_names[7]: extract_runner_attr7(single_runner_data),
-                           field_names[8]: extract_runner_attr8(single_runner_data),
-                           field_names[9]: extract_runner_attr9(single_runner_data),
-                           }
-    """ extract each desired attribute for eahc runner and returns a dict"""
+def prepare_str(single_runner_data, delimiter="#") -> list:
+    """prepares string for attribute extraction cleaning the string and splitting it into a list of string """
+    clean_str = re.sub(r" {2,}", delimiter, single_runner_data)
+    clean_str = re.sub("(?<=[0-9])(\s)(?=[A-Z])", delimiter, clean_str)
+    clean_str = re.sub("(?<=[a-z])(\s)(?=[0-9])", delimiter, clean_str)
+    clean_str = re.sub("(?<=[0-9])(\. )(?=[A-Z])", delimiter, clean_str)
+    return clean_str.split(delimiter)
 
-def main(config) -> DataFrame:
-    """main function that scrapes all the runner data"""
-    url = create_url(config.base, config.year, config.end)
+
+def get_run_link(single_runner_data) -> str:
+    try:
+        return single_runner_data.find("a", href=True)["href"]
+    except TypeError:
+        return "missing link"
+
+
+def create_runner_df(runner_data, field_names, year) -> dict:
+    """sets attributes and builds a dataframe"""
+    runner_data_list = []
+    for single_runner_data in runner_data[2:-1]:
+
+        single_runner_list = prepare_str(single_runner_data.text)
+        if len(single_runner_list) >= 6:
+            print(single_runner_list)
+            single_runner_dict = {field_names[1]: single_runner_list[0],
+                                  field_names[2]: single_runner_list[1],
+                                  field_names[3]: single_runner_list[2],
+                                  field_names[4]: single_runner_list[3],
+                                  field_names[5]: single_runner_list[4],
+                                  field_names[6]: single_runner_list[5],
+                                  field_names[7]: get_run_link(single_runner_data),
+                                  field_names[8]: year,
+                                  }
+            runner_data_list.append(single_runner_dict)
+    return DataFrame(runner_data_list)
+
+
+def scrape_single_year(url, year) -> DataFrame:
+    """scrapes all the runner data, extracts the attributes and """
     html_content = get_runner_data(url)
     runner_data = parse_runner_data(html_content)
-    runner_data_df = reshape_runner_data(runner_data)
+    runner_data_df = create_runner_df(runner_data, config.field_names, year)
     return runner_data_df
 
+
+def main(config):
+    year_df_list = []
+    for year in config.years:
+        url = create_url(config.url_base, year, config.url_end)
+        year_df = scrape_single_year(url, year)
+        year_df_list.append(year_df)
+    return concat(year_df_list)
 
 if __name__ == "__main__":
     os.chdir("..")
@@ -91,5 +91,8 @@ if __name__ == "__main__":
     print("first url is:", url)
     html_content = get_runner_data(url)
     runner_data = parse_runner_data(html_content)
-    str_fields = parse_str_fields(runner_data[0])
-    print(str_fields)
+    link = runner_data[2:][0].find_all("a", href=True)[0]["href"]
+    print(link)
+    my_df = create_runner_df(runner_data, config.field_names, config.years[0])
+    final_df  = main(config)
+    print(final_df)
