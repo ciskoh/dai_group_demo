@@ -33,9 +33,9 @@ def parse_runner_data(html_content) -> list:
 def prepare_str(single_runner_data, delimiter="#") -> list:
     """prepares string for attribute extraction cleaning the string and splitting it into a list of string """
     clean_str = re.sub(r" {2,}", delimiter, single_runner_data)
-    clean_str = re.sub("(?<=[0-9])(\s)(?=[A-Z])", delimiter, clean_str)
-    clean_str = re.sub("(?<=[a-z])(\s)(?=[0-9])", delimiter, clean_str)
-    clean_str = re.sub("(?<=[0-9])(\. )(?=[A-Z])", delimiter, clean_str)
+    clean_str = re.sub("(?<=[0-9])(\s)(?=[A-Z\u00C0-\u00FF])", delimiter, clean_str)
+    clean_str = re.sub("(?<=[a-z\u00C0-\u00FF])(\s)(?=[0-9])", delimiter, clean_str)
+    clean_str = re.sub("(?<=[0-9])(\. )(?=[A-Z\u00C0-\u00FF])", delimiter, clean_str)
     return clean_str.split(delimiter)
 
 
@@ -94,5 +94,6 @@ if __name__ == "__main__":
     link = runner_data[2:][0].find_all("a", href=True)[0]["href"]
     print(link)
     my_df = create_runner_df(runner_data, config.field_names, config.years[0])
-    complete_runner_df  = main(config)
+    complete_runner_df = main(config)
+    print(complete_runner_df)
 
