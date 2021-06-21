@@ -30,12 +30,16 @@ def parse_runner_data(html_content) -> list:
     return list(runner_data)
 
 
-def prepare_str(single_runner_data, delimiter="#") -> list:
+def prepare_str(single_runner_data, delimiter="##") -> list:
     """prepares string for attribute extraction cleaning the string and splitting it into a list of string """
-    clean_str = re.sub(r" {2,}", delimiter, single_runner_data)
-    clean_str = re.sub("(?<=[0-9])(\s)(?=[A-Z\u00C0-\u00FF])", delimiter, clean_str)
-    clean_str = re.sub("(?<=[a-z\u00C0-\u00FF])(\s)(?=[0-9])", delimiter, clean_str)
-    clean_str = re.sub("(?<=[0-9])(\. )(?=[A-Z\u00C0-\u00FF])", delimiter, clean_str)
+    clean_str = single_runner_data
+    clean_str = re.sub(r" {2,}", delimiter, clean_str)
+    clean_str = re.sub("(?<=[0-9])(\s)(?=[a-zA-Z\u00C0-\u00FF])", delimiter, clean_str)
+    clean_str = re.sub("(?<=[A-Za-z\u00C0-\u00FF\.])(\s)(?=[0-9])", delimiter, clean_str)
+    clean_str = re.sub("(?<=[0-9])(\.\s)(?=[a-zA-Z\u00C0-\u00FF])", delimiter, clean_str)
+    clean_str = re.sub("(?<=[0-9])(\.\s)(?=[a-zA-Z\u00C0-\u00FF])", delimiter, clean_str)
+    print(clean_str)
+
     return clean_str.split(delimiter)
 
 
