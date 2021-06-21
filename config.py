@@ -11,7 +11,7 @@ YEARS_LIST = list(range(2014, 2019))
 RUNNER_GROUPS = [[0, 20], [21, 30], [31, 40], [41, 50], [51, 110]]
 FIELD_NAMES = ["Id", "Category", "Rang", "Fullname", "Age_year", "Location", "total_time", "run_link", "run_year"]
 FIELD_DEFS = ["integer primary key autoincrement", "varchar", "varchar", "varchar", "integer", "varchar", "timestamp", "varchar", "integer"]
-DB_FILE_PATH = "assets/runners_db.conn"
+DB_FILE_PATH = "assets/runners_db.db"
 
 
 @dataclass
