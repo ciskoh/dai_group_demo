@@ -53,7 +53,6 @@ def create_runner_df(runner_data, field_names, year) -> dict:
 
         single_runner_list = prepare_str(single_runner_data.text)
         if len(single_runner_list) >= 6:
-            print(single_runner_list)
             single_runner_dict = {field_names[1]: single_runner_list[0],
                                   field_names[2]: single_runner_list[1],
                                   field_names[3]: single_runner_list[2],
@@ -67,19 +66,20 @@ def create_runner_df(runner_data, field_names, year) -> dict:
     return DataFrame(runner_data_list)
 
 
-def scrape_single_year(url, year) -> DataFrame:
+def scrape_single_year(url, year, field_names) -> DataFrame:
     """scrapes all the runner data, extracts the attributes and """
     html_content = get_runner_data(url)
     runner_data = parse_runner_data(html_content)
-    runner_data_df = create_runner_df(runner_data, config.field_names, year)
+    runner_data_df = create_runner_df(runner_data, field_names, year)
     return runner_data_df
 
 
-def main(config):
+def main(config) -> DataFrame:
+    """scrapes data about runners adn returns a dataframe"""
     year_df_list = []
     for year in config.years:
         url = create_url(config.url_base, year, config.url_end)
-        year_df = scrape_single_year(url, year)
+        year_df = scrape_single_year(url, year, config.field_names)
         year_df_list.append(year_df)
     return concat(year_df_list)
 
@@ -94,5 +94,5 @@ if __name__ == "__main__":
     link = runner_data[2:][0].find_all("a", href=True)[0]["href"]
     print(link)
     my_df = create_runner_df(runner_data, config.field_names, config.years[0])
-    final_df  = main(config)
-    print(final_df)
+    complete_runner_df  = main(config)
+
