@@ -38,7 +38,7 @@ app.layout = html.Div([
                      options=[{'label': y, 'value': y} for y in config.years],
                      value='',
                      placeholder="Select a year",
-                     multi=False,  # TODO: change to multiselector
+                     multi=True,  # TODO: change to multiselector
                      clearable=True,
                      className='Selector'
                      ), ]
@@ -68,15 +68,16 @@ def filter_age_group(age_group=None) -> str:
     """adds age_group filter to sql_query"""
 
     if age_group:
-        start_age = age_group.split(" to")[0]
-        end_age = age_group.split(" to ")[1]
+        start_age, end_age = age_group.split(" to ")
         sel1_output = f" run_year - Age_year >= {start_age} AND run_year - Age_year <= {end_age} "
         return sel1_output
 
 def filter_year(race_year=None) -> str:
     """adds marathon year filter to sql_query"""
     if race_year:
-        sel2_output = f"run_year={race_year}"
+        if not isinstance(race_year, list):
+            race_year = [race_year]
+        sel2_output = f"run_year IN ({', '.join([str(ry) for ry in race_year])})"
         return sel2_output
 
 
@@ -95,7 +96,7 @@ def query_data(sql_query, connection) -> DataFrame:
     return read_sql_query(sql_query, connection)
 
 def fetch_data_wrapper(sel1, sel2, db_file_path) -> DataFrame:
-    """wrapper function to get data and return a dataframe"""
+    """wrapper function gets data and returns a dataframe"""
     conn = connect(db_file_path)
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -122,8 +123,7 @@ def add_age_group(df, age_groups) -> DataFrame:
 def update_plot(sel1, sel2, config=config):
     filtered_df = fetch_data_wrapper(sel1, sel2, config.db_file_path)
     df_with_age_group = add_age_group(filtered_df, config.age_groups)
-    #TODO: order of legend labels
-    #TODO: fixed X axis length
+    #TODO: labels of x axis
     fig = px.histogram(df_with_age_group,
                        x="run_year",
                        color="age_group",
