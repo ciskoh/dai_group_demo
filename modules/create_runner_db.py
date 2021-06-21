@@ -58,7 +58,7 @@ def populate_db(conn, runner_data_df):
     """inserts scraped_data in the sqlite database"""
     runner_data_df.to_sql('runners', conn)
 
-
+#TODO: add checks
 def check_db(db):
     """check that data was inserted correctly"""
     return NotImplementedError()
@@ -73,6 +73,8 @@ def main(config) -> None:
     populate_db(conn, runner_data_df)
 
     check_db(conn)
+
+    conn.close
     return None
 
 if __name__ == "__main__":
