@@ -29,7 +29,7 @@ def populate_db(conn, runner_data_df):
     """inserts scraped_data in the sqlite database"""
     runner_data_df.to_sql('runners', conn)
 
-#TODO: add checks
+
 def check_df(df):
     """check that data was inserted correctly"""
     for n in range(len(df["Age_year"])):

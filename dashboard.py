@@ -25,7 +25,6 @@ app.layout = html.Div([
     html.H1(className='h1', children='Zurich Marathon 2014-2018 data exploration'),
     html.H2(className="h1", children='Interactive visualisation of runners participating to the Zurich marathon '),
     html.Div(children=[
-        # TODO check possible output/value type
         dcc.Dropdown(id="selector1",
                      options=[{'label': f"{r[0]} to {r[1]}", 'value': f"{r[0]} to {r[1]}"} for r in config.age_groups],
                      value='0 to 100',
@@ -38,7 +37,7 @@ app.layout = html.Div([
                      options=[{'label': y, 'value': y} for y in config.years],
                      value='',
                      placeholder="Select a year",
-                     multi=True,  # TODO: change to multiselector
+                     multi=True,
                      clearable=True,
                      className='Selector'
                      ), ]
@@ -97,6 +96,7 @@ def query_data(sql_query, connection) -> DataFrame:
 
 def fetch_data_wrapper(sel1, sel2, db_file_path) -> DataFrame:
     """wrapper function gets data and returns a dataframe"""
+    # TODO: catch exception by creating database
     conn = connect(db_file_path)
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
@@ -141,7 +141,6 @@ def update_data_table(sel1, sel2, config = config):
     return df_with_age_group.to_dict('records')
 
 if __name__ == '__main__':
-    # TODO: catch exception by creating database
     conn = connect(config.db_file_path)
     cursor = conn.cursor()
     cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
