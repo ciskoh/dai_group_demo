@@ -1,7 +1,9 @@
-
+2014-30
 # Demo exercise for DAI group interview
 
 _Author: Matteo Jucker Riva_    
+
+Version with no docker
 
 ##Links    
 [online repo](https://github.com/ciskoh/dai_group)   
