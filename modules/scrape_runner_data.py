@@ -23,10 +23,10 @@ def get_runner_data(url):
         return response
 
 
-def parse_runner_data(html_content) -> list:
+def parse_runner_data(html_content, tag="font", attrs = {"size": "2"}) -> list:
     """parses html content for relevant data"""
     soup = BeautifulSoup(html_content.text, "html.parser")
-    runner_data = soup.findAll("font", {"size": "2"})
+    runner_data = soup.findAll(tag, attrs)
     return list(runner_data)
 
 
@@ -38,8 +38,6 @@ def prepare_str(single_runner_data, delimiter="##") -> list:
     clean_str = re.sub("(?<=[A-Za-z\u00C0-\u00FF\.])(\s)(?=[0-9])", delimiter, clean_str)
     clean_str = re.sub("(?<=[0-9])(\.\s)(?=[a-zA-Z\u00C0-\u00FF])", delimiter, clean_str)
     clean_str = re.sub("(?<=[0-9])(\.\s)(?=[a-zA-Z\u00C0-\u00FF])", delimiter, clean_str)
-    print(clean_str)
-
     return clean_str.split(delimiter)
 
 
@@ -50,7 +48,7 @@ def get_run_link(single_runner_data) -> str:
         return "missing link"
 
 
-def create_runner_df(runner_data, field_names, year) -> dict:
+def create_runner_df(runner_data, field_names, year) -> DataFrame:
     """sets attributes and builds a dataframe"""
     runner_data_list = []
     for single_runner_data in runner_data[2:-1]:
@@ -79,13 +77,16 @@ def scrape_single_year(url, year, field_names) -> DataFrame:
 
 
 def main(config) -> DataFrame:
-    """scrapes data about runners adn returns a dataframe"""
+    """scrapes data about runners for all years and returns a dataframe"""
     year_df_list = []
     for year in config.years:
         url = create_url(config.url_base, year, config.url_end)
         year_df = scrape_single_year(url, year, config.field_names)
         year_df_list.append(year_df)
-    return concat(year_df_list)
+    multi_year_df = concat(year_df_list)
+    multi_year_df['Id'] = range(0, len(multi_year_df)) # adds id column
+    multi_year_df = multi_year_df[config.field_names]
+    return multi_year_df
 
 if __name__ == "__main__":
     os.chdir("..")

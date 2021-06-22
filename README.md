@@ -21,7 +21,7 @@ b. Store the data in a database with the following fields:
 *Location: varchar   
 *total_time timestamp   
 *run_link: varchar   
-*run_year: integer   
+*Run_year: integer   
     
 c.Create a Dashboard in Python Dash with the following criteria:
   i.     Create drop-down filters for the group of ages (0-20, 21-30, etc,) and run_year
