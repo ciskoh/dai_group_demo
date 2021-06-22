@@ -3,6 +3,8 @@
 
 _Author: Matteo Jucker Riva_    
 
+Version with docker
+
 ##Links    
 [online repo](https://github.com/ciskoh/dai_group)   
 server AWS: MISSING    
