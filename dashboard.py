@@ -30,7 +30,7 @@ app.layout = html.Div([
                      options=[{'label': f"{r[0]} to {r[1]}", 'value': f"{r[0]} to {r[1]}"} for r in config.age_groups],
                      value='0 to 100',
                      placeholder="Select age group",
-                     multi=True,  # TODO: change to multiselector
+                     multi=True,
                      clearable=True,
                      className='Selector'
                      ),
@@ -169,20 +169,7 @@ def update_data_table(sel1, sel2, config=config):
 
 
 if __name__ == '__main__':
-    conn = connect(config.db_file_path)
-    cursor = conn.cursor()
-    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    table_name = cursor.fetchall()[0][0]
-    sel1_output = filter_age_group(["0 to 50", "0 to 20"])
-    sel2_output = filter_year("2015")
-    sql_query = create_sql_query(table_name, sel1_output, sel2_output)
-    print(sql_query)
-    # # without pandas
-    # filtered_df = query_data(sql_query, conn)
-    # completed_df = add_age_group(filtered_df, config.age_groups)
 
     # run app
     app.run_server(debug=True)
-    # cursor = conn.cursor()
-    # cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    # table_name = cursor.fetchone()
+
