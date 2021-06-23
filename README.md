@@ -6,7 +6,7 @@ _Author: Matteo Jucker Riva_
 Dockerized and deployed version
 
 ##Links    
-[online repo](https://github.com/ciskoh/dai_group_)   
+[online repo](https://github.com/ciskoh/dai_group_demo)   
 [server AWS](http://3.68.190.143:8050/)
 
 ## Request   
@@ -39,10 +39,11 @@ ii.     Choose the storage as you prefer
 
 ## Description & development notes
 
-__Dependecies and install__
+__Dependecies and install__   
 All code is created with pycharm in python 3.9.    
    
-virtual environment created with Conda. See environment.yml for list of dependencies
+Virtual environment & package management created with Conda.   
+See `environment.yml` for list of dependencies
 Install all dependencies with the following command:   
     `conda env create -f environment.yml`   
 
@@ -50,7 +51,7 @@ __Dockerized version__ all files related with the dashboard are cointained in th
 
 config.py implements a `Config` class that holds the main settings for the creation of the database
 
-###Workflow:
+### Workflow:
 
 1. Webscraping using Request and BF4:    
     `app/modules/scrape_runner_data.py` handles all web_scraping and is called during database creation   
