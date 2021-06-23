@@ -5,7 +5,7 @@ _Author: Matteo Jucker Riva_
 
 Dockerized and deployed version
 
-##Links    
+## Links    
 [online repo](https://github.com/ciskoh/dai_group_demo)   
 [server AWS](http://3.68.190.143:8050/)
 
