@@ -1,11 +1,11 @@
 """
-This module creates the dashboard sourcing data from assets/runner_db.db
+This module creates the dashboard sourcing data from assets/runner_db.sqlite
 """
 
-import dash
 import dash_table as dt
 import dash_core_components as dcc
 import dash_html_components as html
+import dash
 from dash.dependencies import Input, Output
 from pandas import DataFrame, read_sql_query
 from sqlite3 import connect

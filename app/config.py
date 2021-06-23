@@ -18,7 +18,7 @@ FIELD_TYPES = ["integer primary key autoincrement", "varchar", "varchar", "varch
 
 # Below the sql types from sqlalchemy library, needed for populating the database from pandas
 FIELD_TYPES2 = [st.Integer, st.String, st.String, st.String, st.String, st.String, st.Time, st.String, st.Integer]
-DB_FILE_PATH = "app/assets/runners_db.sqlite"
+DB_FILE_PATH = "assets/runners_db.sqlite"
 
 
 @dataclass
