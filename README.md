@@ -3,7 +3,7 @@
 
 _Author: Matteo Jucker Riva_    
 
-Dockerized and deployed version
+Production level version with OOP and formal DB structure
 
 ## Links    
 [online repo](https://github.com/ciskoh/dai_group_demo)   
@@ -49,8 +49,8 @@ Install all dependencies with the following command:
 
 __Dockerized version__ all files related with the dashboard are cointained in the `app`folder. DOCKERFILE contains the instruction to create a docker image for the app using `environment.yml` . 
 
-config.py implements a `Config` class that holds the main settings for the creation of the database
-
+- `config.py` implements a `Config` class that holds the main settings for the creation of the database
+--> `classes.py` includes several classes for robust data management
 ### Workflow:
 
 1. Webscraping using Request and BF4:    
@@ -64,4 +64,10 @@ config.py implements a `Config` class that holds the main settings for the creat
    
 1. Deployment
     Deployed with docker on AWS using The Elastic Container Registry (ECR) & Elastic Container Service (ECS) at the following address : [http://3.68.190.143:8050/](http://3.68.190.143:8050/)
+   
+### Additions & Changes for PRODUCTION LEVEL
+
+1. Classes:
+   unner class
+   
 

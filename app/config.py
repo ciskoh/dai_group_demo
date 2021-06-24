@@ -3,7 +3,6 @@
 	used in the other modules
 """
 from dataclasses import dataclass
-import sqlalchemy.types as st
 # default parameters for the config
 URL_BASE = "https://services.datasport.com/"
 URL_END = "/lauf/zuerich/alfab.htm"
@@ -17,7 +16,6 @@ FIELD_NAMES = ["Id", "Category", "Rang", "Fullname", "Age_year", "Location", "to
 FIELD_TYPES = ["integer primary key autoincrement", "varchar", "varchar", "varchar", "integer", "varchar", "timestamp", "varchar", "integer" ]
 
 # Below the sql types from sqlalchemy library, needed for populating the database from pandas
-FIELD_TYPES2 = [st.Integer, st.String, st.String, st.String, st.String, st.String, st.Time, st.String, st.Integer]
 DB_FILE_PATH = "assets/runners_db.sqlite"
 
 
