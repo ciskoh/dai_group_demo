@@ -68,6 +68,17 @@ __Dockerized version__ all files related with the dashboard are cointained in th
 ### Additions & Changes for PRODUCTION LEVEL
 
 1. Classes:
-   unner class
+   implemented the following classes to ensure
+   strict data control
+   
+    > StringAttr, IntAttr, TimeAttr, Runner, Marathon
+   
+1. Database:
+    To ensure database follows formal rules I split the database
+    in multiple tables:
+   
+    > Runners - MARATHONS - CONJOINT-MARATHON_2014, CONJOINT-MARATHON_2015, CONJOINT-MARATHON_2016, CONJOINT-MARATHON_2017, CONJOINT-MARATHON_2018
+   
+
    
 

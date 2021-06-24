@@ -55,7 +55,16 @@ class TimeAttr(RunnerAttr):
         try:
             return dtime.strptime(attr_list[self.pos], "%H:%M.%S,%f")
         except ValueError:
-            raise ValueError(f"attr {attr_list[self.pos]} cannot be converted to a timestamp format")
+            pass
+        try:
+            return dtime.strptime(attr_list[self.pos], "%M.%S,%f")
+        except ValueError:
+            pass
+        try:
+            return dtime.strptime(attr_list[self.pos][:-4], "%H:%M.%S,%f")
+        except ValueError:
+            return dtime.strptime("0:00.0,0", "%H:%M.%S,%f")
+
     def __repr__(self):
         return f"TimeAttr ( value: {self.value})"
 
@@ -64,9 +73,22 @@ class TimeAttr(RunnerAttr):
 class Runner:
     runner_attrs: dict
 
-    def __init__(self, attr_names:[str], attr_orders:[int], attr_types:[str], attr_list:[str]):
+    def __init__(self, config, attr_list: [str]):
+        attr_names = config.field_names
+        attr_orders = config.field_orders
+        attr_types = config.field_types
+        # length check
+        if not len(attr_names) == len(attr_orders) == len(attr_types) == len(attr_list):
+            print(f"missing some values:")
+            print(f"names: {len(attr_names)}")
+            print(f"types: {len(attr_types)}")
+            print(f"order: {len(attr_orders)}")
+            print(f"attrs: {len(attr_list)}")
+            raise ValueError
+
         self.runner_attrs ={}
         for n in range(len(attr_orders)):
+            check_list=[attr_names[n], attr_orders[n], attr_types[n], attr_list[n]]
             if all([attr_names[n], attr_orders[n], attr_types[n], attr_list[n]]):
                 if attr_types[n].lower() == "varchar":
                     self.runner_attrs[attr_names[n]] = StringAttr(attr_orders[n], attr_list)
